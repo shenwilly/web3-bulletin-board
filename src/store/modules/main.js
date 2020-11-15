@@ -1,4 +1,4 @@
-import Box, { isLoggedIn } from '3box'
+import Box from '3box'
 import GTCRService from '@/services/gtcr'
 import { IPFS_GATEWAY } from '@/env'
 
@@ -171,8 +171,9 @@ const initialState = {
       });
     },
     loggedIn(state) {
+      // console.log(state.user, state.accounts, "???", isLoggedIn(state.accounts[0]))
       if (state.user == null) return false
-      return isLoggedIn(state.accounts[0])
+      return true
     },
     isLoading(state) {
       return state.isLoading
