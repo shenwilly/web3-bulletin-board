@@ -18,8 +18,8 @@
           <b-nav-item href="https://kovan-gtcr.netlify.app/" target="_blank">Policy</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav v-else-if="!isModerator && loggedIn">
-          <b-nav-item href="#" class="active" :class="currentRouteName == 'index' ? 'active' : ''">Home</b-nav-item>
-          <b-nav-item href="#" class="" :class="currentRouteName == 'myPosts' ? 'active' : ''">My Posts</b-nav-item>
+          <b-nav-item :to="{ name: 'index' }" :class="currentRouteName == 'index' ? 'active' : ''">Home</b-nav-item>
+          <b-nav-item :to="{ name: 'myPosts' }" :class="currentRouteName == 'myPosts' ? 'active' : ''">My Posts</b-nav-item>
           <b-nav-item href="https://kovan-gtcr.netlify.app/" target="_blank">Policy</b-nav-item>
           <b-nav-item href="https://kovan-gtcr.netlify.app/" target="_blank">Apply as Moderator</b-nav-item>
         </b-navbar-nav>

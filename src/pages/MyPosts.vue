@@ -1,11 +1,29 @@
 <template>
     <b-container>
-        My Posts
+        <b-row class="mt-3">
+            <b-col cols="12" v-for="post in myPosts" v-bind:key="post.postId">
+                <Comment :post="post" class="mb-2" />
+            </b-col>
+        </b-row>
     </b-container>
 </template>
 
 <script>
+import Comment from '@/components/Comment.vue'
+
 export default {
-    
+    components: {
+        Comment,
+    },
+    computed: {
+        user() {
+            return this.$store.getters.user
+        },
+        myPosts() {
+            let myPosts = this.$store.getters.posts.filter(post => post.author == this.user.DID)
+            return myPosts.slice().reverse();
+        }
+    },
+
 }
 </script>
