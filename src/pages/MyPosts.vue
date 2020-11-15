@@ -2,7 +2,7 @@
     <b-container>
         <b-row class="mt-3">
             <b-col cols="12" v-for="post in myPosts" v-bind:key="post.postId">
-                <Comment :post="post" class="mb-2" />
+                <Comment :post="post" :viewStatus="true" class="mb-2" />
             </b-col>
         </b-row>
     </b-container>

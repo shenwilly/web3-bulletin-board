@@ -58,7 +58,7 @@ class GTCRService {
             .map(item => item.decodedData[0])
     }
 
-    async fetchReportedPostIds(address) {
+    async fetchReportedItems(address) {
         const postGTCR = new GeneralizedTCR(
             window.ethereum,
             BLOCKED_POSTS_TCR_ADDRESS,
@@ -74,7 +74,7 @@ class GTCRService {
         console.log(items)
         console.log(items.filter(item => item['11'].toLowerCase() == address.toLowerCase()))
         return items.filter(item => item['11'].toLowerCase() == address.toLowerCase())
-            .map(item => item.decodedData[0])
+            // .map(item => item.decodedData[0])
     }
 
     async reportPost(postId) {

@@ -1,5 +1,13 @@
 <template>
     <b-card>
+      <b-row v-if="viewStatus">
+        <b-col class="text-left">
+          <b>Pending Execution</b>
+        </b-col>
+        <b-col class="text-right">
+          <b-button variant="info" v-on:click="handleView">View on Curate</b-button>
+        </b-col>
+      </b-row>
       <b-row class="text-left">
         <b-col cols="12">
           <b-row>
@@ -33,6 +41,9 @@ export default {
     post: Object,
     canReport: {
       default: false,
+    },
+    viewStatus: {
+      default: false,
     }
   },
   computed: {
@@ -49,6 +60,9 @@ export default {
   methods: {
     handleReport() {
       this.$emit('onClickReport', this.post.postId)
+    },
+    handleView() {
+      this.$emit('onClickView', this.post.postId)
     }
   },
   filters: {
