@@ -39,15 +39,11 @@ class GTCRService {
     // MODERATOR_TCR_DEPLOYMENT_BLOCK = 22093223
     // BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK = 22111416
     async fetchPostMetaEvidence() {
-        // const postGTCR = new GeneralizedTCR(
-        //     window.ethereum,
-        //     BLOCKED_POSTS_TCR_ADDRESS,
-        //     GTCR_VIEW_ADDRESS,
-        //     IPFS_GATEWAY,
-        //     BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
-        // );
-        
         return await this.postGTCR.getLatestMetaEvidence()
+    }
+
+    async fetchChallengePeriodDuration() {
+        return await this.postGTCR.challengePeriodDuration()
     }
 
     async fetchModerators() {
@@ -89,43 +85,36 @@ class GTCRService {
         // items.forEach(item => {
         //     console.log(item.decodedData, "blockedPost", item['11'])
         // })
-        console.log(items)
-        console.log(items.filter(item => item['11'].toLowerCase() == address.toLowerCase()))
+        // console.log(items)
+        // console.log(items.filter(item => item['11'].toLowerCase() == address.toLowerCase()))
         return items.filter(item => item['11'].toLowerCase() == address.toLowerCase())
             // .map(item => item.decodedData[0])
     }
 
     async reportPost(postId) {
-        console.log(postId);
+        // console.log(postId);
 
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const signer = provider.getSigner()
 
         const contract = new ethers.Contract(
             BLOCKED_POSTS_TCR_ADDRESS, gtcrAbi, provider);
-        // console.log(contract, "<<")
-        
-        // console.log(contract.arbitrator())
 
         const contractWithSigner = contract.connect(signer);
-        // const tx = await contractWithSigner.addItem
-        // const postGTCR = new GeneralizedTCR(
-        //     window.ethereum,
-        //     BLOCKED_POSTS_TCR_ADDRESS,
-        //     GTCR_VIEW_ADDRESS,
-        //     IPFS_GATEWAY,
-        //     BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
-        // );
+
         const metaEvidence = await this.postGTCR.getLatestMetaEvidence()
-        console.log(metaEvidence[0])
         const encodedParams = gtcrEncode({
             columns: metaEvidence[0].metadata.columns,
             values: {PostID: postId}
         })
-        console.log(encodedParams, "<<?")
+        // console.log(encodedParams, "<<?")
+        const baseDeposit = await contract.submissionBaseDeposit()
+        let baseDepositEther = parseFloat(ethers.utils.formatEther(baseDeposit))
+        baseDepositEther += 0.03 // TODO: TEMP HARD CODED JUROR FEE
+        
         const tx = await contractWithSigner.addItem(encodedParams, {
-            value: ethers.utils.parseEther("0.03"),
-            // gasLimit
+            // value: ethers.utils.parseEther(baseDepositEther),
+            value: ethers.utils.parseEther(baseDepositEther.toString()),
           })
         console.log(tx, "<<<")
     }

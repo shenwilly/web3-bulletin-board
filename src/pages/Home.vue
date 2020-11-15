@@ -102,7 +102,12 @@ export default {
 
     async reportPost(postId) {
       console.log(postId)
-      GTCRService.reportPost(postId);
+      try {
+        await GTCRService.reportPost(postId);
+        // this.$store.dispatch("markPostId")
+      } catch(e) {
+          console.debug(e)
+      }      
     }
 
   }

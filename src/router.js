@@ -1,41 +1,15 @@
 import Vue from "vue";
 import Router from "vue-router";
-// import store from "@/store/index";
 
 import HomePage from "@/pages/Home"
 import ReportsPage from "@/pages/Reports"
 import MyPostsPage from "@/pages/MyPosts"
-
 
 Vue.use(Router);
 
 const router = new Router({
   mode: 'history',
   routes: [
-    // {
-    //   path: "/",
-    //   component: MainLayout,
-    //   children: [
-    //     {
-    //       path: "",
-    //       name: "index",
-    //       redirect: "videos",
-    //       // component: VideoPage,
-    //     },
-    //     {
-    //       path: "videos/",
-    //       name: "videos",
-    //       component: VideoPage,
-    //     },
-
-    //     {
-    //       path: "videos/:videoId",
-    //       name: "video-detail",
-    //       component: VideoDetailPage,
-    //     },
-    //   ]
-    // },
-
     {
       path: "",
       name: "index",
@@ -60,9 +34,5 @@ const router = new Router({
     }
   }
 });
-
-// router.beforeEach((to, from, next) => {
-    
-// })
 
 export default router;

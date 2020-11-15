@@ -4,9 +4,12 @@ import { IPFS_GATEWAY } from '@/env'
 
 const initialState = {
     web3Enabled: true,
-    threadAddress: '/orbitdb/zdpuB2ZwozqZkfSCKCgqY1mDC3CQ4B85rgbAe7NteWBWCMcoJ/3box.thread.myThread.myThread',
-    spaceName: 'myThread',
+    // threadAddress: '/orbitdb/zdpuB2ZwozqZkfSCKCgqY1mDC3CQ4B85rgbAe7NteWBWCMcoJ/3box.thread.myThread.myThread',
+    // spaceName: 'myThread',
+    threadAddress: "/orbitdb/zdpuArtx5WfJ5TxqS5zZ2Lr6RDC6n1r3uXwkj7c8Q1s7vj7cn/3box.thread.Web3BB.firstBB",
+    spaceName: 'Web3BB',
     posts: [],
+    markedPostIds: [],
     blockedPostIds: [],
     accounts: [],
     isLoading: false,
@@ -15,7 +18,10 @@ const initialState = {
     user: null,
     isModerator: false,
     thread: null,
+
     metaEvidence: null,
+    submissionBaseDeposit: null,
+    challengePeriodDuration: null,
   };
   
   export const state = { ...initialState };
@@ -32,7 +38,6 @@ const initialState = {
         } else {
           posts = await Box.getThreadByAddress(state.threadAddress)
         }
-        // console.log(posts[1])
 
         await this.dispatch("fetchBlockedPostIds")
 
@@ -40,10 +45,10 @@ const initialState = {
       },
       
       async fetchBlockedPostIds(context) {
-        console.log("fetch blockedPosts")
+        // console.log("fetch blockedPosts")
         let blockedPostIds = await GTCRService.fetchBlockedPosts();
         
-        console.log(blockedPostIds, "???")
+        // console.log(blockedPostIds, "???")
         context.commit('setBlockedPostIds', blockedPostIds);
       },
       
@@ -64,7 +69,7 @@ const initialState = {
         if (state.accounts.length > 0) {
           context.commit('setLoadingLabel', "Authenticating (2/3)");
           
-          await box.auth(['myThread'], { address: state.accounts[0] })
+          await box.auth([state.spaceName], { address: state.accounts[0] })
           // console.log(box.DID)
           
           // const isLoggedInx = isLoggedIn(this.accounts[0])
@@ -78,7 +83,11 @@ const initialState = {
           const space = await box.openSpace(state.spaceName)
           context.commit('setUser', space.user);
 
-          const thread = await space.joinThreadByAddress('/orbitdb/zdpuB2ZwozqZkfSCKCgqY1mDC3CQ4B85rgbAe7NteWBWCMcoJ/3box.thread.myThread.myThread')
+          // OPEN NEW THREAD
+          // const thread = await space.joinThread("firstBB")
+          // console.log(thread, "<<<")
+
+          const thread = await space.joinThreadByAddress(state.threadAddress)
           context.commit('setThread', thread);
           
           const moderatorAddresses = await GTCRService.fetchModerators()
@@ -90,8 +99,20 @@ const initialState = {
 
       async fetchMetaEvidence(context) {
         const metaEvidence = await GTCRService.fetchPostMetaEvidence()
-        console.log(metaEvidence)
+        // console.log(metaEvidence)
         context.commit('setMetaEvidence', metaEvidence)
+      },
+
+      async fetchTcrConfig(context) {
+        // const submissionBaseDeposit = await GTCRService.fetchSubmissionBaseDeposit()
+        // context.commit('setSubmissionBaseDeposit', submissionBaseDeposit)
+
+        const challengePeriodDuration = await GTCRService.fetchChallengePeriodDuration()
+        context.commit('setChallengePeriodDuration', challengePeriodDuration)
+      },
+
+      async markPostId(context, postId) {
+        context.commit('markPostId', postId)
       }
   };
   
@@ -128,6 +149,15 @@ const initialState = {
     },
     setMetaEvidence(state, metaEvidence) {
       state.metaEvidence = metaEvidence
+    },
+    setSubmissionBaseDeposit(state, submissionBaseDeposit) {
+      state.submissionBaseDeposit = submissionBaseDeposit
+    },
+    setChallengePeriodDuration(state, challengePeriodDuration) {
+      state.challengePeriodDuration = challengePeriodDuration
+    },
+    markPostId(state, postId) {
+      state.markedPostIds.push(postId)
     }
   };
   

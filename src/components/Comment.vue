@@ -1,13 +1,5 @@
 <template>
     <b-card>
-      <b-row v-if="viewStatus">
-        <b-col class="text-left">
-          <b>Pending Execution</b>
-        </b-col>
-        <b-col class="text-right">
-          <b-button variant="info" v-on:click="handleView">View on Curate</b-button>
-        </b-col>
-      </b-row>
       <b-row class="text-left">
         <b-col cols="12">
           <b-row>
@@ -56,6 +48,11 @@
         </b-col>
         <b-col cols="12">
           <label class="text-content pt-3 mb-0">{{ message }}</label>
+        </b-col>
+      </b-row>
+      <b-row v-if="viewStatus">
+        <b-col class="text-right">
+          <b-button variant="info" v-on:click="handleView">View on Curate</b-button>
         </b-col>
       </b-row>
     </b-card>
