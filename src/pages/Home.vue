@@ -41,6 +41,7 @@
 
 <script>
 import Comment from '@/components/Comment.vue'
+import GTCRService from '@/services/gtcr'
 
 export default {
   components: {
@@ -97,6 +98,7 @@ export default {
 
     async reportPost(postId) {
       console.log(postId)
+      GTCRService.reportPost(postId);
     }
 
   }

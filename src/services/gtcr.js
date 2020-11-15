@@ -1,4 +1,7 @@
 import { GeneralizedTCR } from "@kleros/gtcr-sdk";
+import { ethers } from "ethers";
+import gtcrAbi from '@/abis/GeneralizedTCR.json';
+import { gtcrEncode } from '@/utils/encoder'
 
 class GTCRService {
     // gtcrFactory = null
@@ -57,6 +60,8 @@ class GTCRService {
             this.IPFS_GATEWAY,
             this.BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
         );
+
+        // console.log(await postGTCR.getLatestMetaEvidence())
             
         const items = await postGTCR.getItems()
         items.forEach(item => {
@@ -65,6 +70,43 @@ class GTCRService {
         return items
             .filter(item => item.status == 1)
             .map(item => item.decodedData[0])
+    }
+
+    async reportPost(postId) {
+        console.log(postId);
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const signer = provider.getSigner()
+
+        const contract = new ethers.Contract(
+            this.BLOCKED_POSTS_TCR_ADDRESS, gtcrAbi, provider);
+        // console.log(contract, "<<")
+        
+        // console.log(contract.arbitrator())
+
+        const contractWithSigner = contract.connect(signer);
+        // const tx = await contractWithSigner.addItem
+        const postGTCR = new GeneralizedTCR(
+            window.ethereum,
+            this.BLOCKED_POSTS_TCR_ADDRESS,
+            this.GTCR_VIEW_ADDRESS,
+            this.IPFS_GATEWAY,
+            this.BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
+        );
+        const metaEvidence = await postGTCR.getLatestMetaEvidence()
+        console.log(metaEvidence[0])
+        const encodedParams = gtcrEncode({
+            columns: metaEvidence[0].metadata.columns,
+            values: {PostID: postId}
+        })
+        console.log(encodedParams, "<<?")
+        const tx = await contractWithSigner.addItem(encodedParams, {
+            value: ethers.utils.parseEther("0.03"),
+            // gasLimit
+          })
+        console.log(tx, "<<<")
+
+        
     }
 }
   

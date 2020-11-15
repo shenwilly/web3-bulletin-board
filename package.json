@@ -19,7 +19,9 @@
     "vue": "^2.6.12",
     "vue-moment": "^4.1.0",
     "vue-router": "^3.4.9",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "bn.js": "^5.0.0",
+    "rlp": "^2.2.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
