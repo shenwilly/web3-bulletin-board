@@ -1,7 +1,7 @@
-import { GTCRFactory, GeneralizedTCR } from "@kleros/gtcr-sdk";
+import { GeneralizedTCR } from "@kleros/gtcr-sdk";
 
 class GTCRService {
-    gtcrFactory = null
+    // gtcrFactory = null
     // mainnet
     // GTCR_VIEW_ADDRESS = "0x98f1309f96044000174a89c2a0e2001ea5d7a524";
     // GTCR_VIEW_ADDRESS = "0x31e8d06b5fc3856cc93f4172d335626c680af1a7";
@@ -21,20 +21,19 @@ class GTCRService {
     
     DEPLOYMENT_BLOCK = 22093223 ; // Optional, but recommended. Setting the deployment block speeds up requests.
 
-    constructor() {
-        console.log("create")
-        this.gtcrFactory = new GTCRFactory(
-            window.ethereum,
-            // mainnet
-            // "0xe9dd523600b74b8ef0af164687079a6c437f9cd5"
-            // "0xcc1f0ca49a9d622da624bff6a4cd5b32c5276b11"
-            // kovan
-            "0x4296b39059b8591d4f22a0fc4ee49508279b8fc6"
-          );
-        
-    }
+    // constructor() {
+    //     console.log("create")
+    //     this.gtcrFactory = new GTCRFactory(
+    //         window.ethereum,
+    //         // mainnet
+    //         // "0xe9dd523600b74b8ef0af164687079a6c437f9cd5"
+    //         // "0xcc1f0ca49a9d622da624bff6a4cd5b32c5276b11"
+    //         // kovan
+    //         "0x4296b39059b8591d4f22a0fc4ee49508279b8fc6"
+    //       );
+    // }
 
-    async getItems() {
+    async fetchModerators() {
         const gtcr = new GeneralizedTCR(
             window.ethereum,
             this.LIST_ADDRESS,
@@ -52,8 +51,7 @@ class GTCRService {
             
         const items = await gtcr.getItems()
         // console.log(items)
-        console.info(items.map(item => item.decodedData))
-
+        return items.map(item => item.decodedData[0])
     }
 }
   

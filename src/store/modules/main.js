@@ -1,4 +1,5 @@
 import Box, { isLoggedIn } from '3box'
+import GTCRService from '@/services/gtcr'
 
 const initialState = {
     web3Enabled: true,
@@ -65,9 +66,11 @@ const initialState = {
 
           const thread = await space.joinThreadByAddress('/orbitdb/zdpuB2ZwozqZkfSCKCgqY1mDC3CQ4B85rgbAe7NteWBWCMcoJ/3box.thread.myThread.myThread')
           context.commit('setThread', thread);
-
-          // console.log(space.user)
-          // console.log(space.user.DID)
+          
+          const moderatorAddresses = await GTCRService.fetchModerators()
+          if (moderatorAddresses.find(address => address.toLowerCase() == state.accounts[0].toLowerCase()) != null) {
+            context.commit('setModerator', true)
+          }
         }
       }
   };
@@ -96,6 +99,9 @@ const initialState = {
     },
     setUser(state, user) {
       state.user = user
+    },
+    setModerator(state, isModerator) {
+      state.isModerator = isModerator
     }
   };
   
@@ -104,7 +110,7 @@ const initialState = {
       return state.posts
     },
     loggedIn(state) {
-      if (state.accounts.length == 0) return false
+      if (state.user == null) return false
       return isLoggedIn(state.accounts[0])
     },
     isLoading(state) {

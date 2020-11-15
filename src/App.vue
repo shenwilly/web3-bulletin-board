@@ -44,8 +44,6 @@
 // import { getResolver } from '3id-resolver'
 import { shortenAddress } from '@/utils/address'
 
-import GTCRService from '@/services/gtcr'
-
 export default {
   computed: {
     isLoading() {
@@ -79,7 +77,6 @@ export default {
     // this.init3Box()
     // Box.getIPFS()
     // this.resolve()
-    GTCRService.getItems()
   },
   methods: {
     // async getAddressFromMetaMask() {
