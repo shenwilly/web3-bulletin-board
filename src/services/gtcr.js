@@ -49,7 +49,9 @@ class GTCRService {
         
         const items = await moderatorGTCR.getItems()
         // console.log(items)
-        return items.map(item => item.decodedData[0])
+        return items
+            .filter(item => item.status == 1)
+            .map(item => item.decodedData[0])
     }
 
     async fetchBlockedPosts() {
