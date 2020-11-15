@@ -23,7 +23,11 @@
             <b-col cols="12" class="text-left" v-if="inputErrorMessage.length > 0">
                 <label class="text-danger"><i>{{ inputErrorMessage }}</i></label>
             </b-col>
-            <b-col sm="12" md="3" offset-sm="0" offset-md="9" class="mt-2">
+            <b-col cols="2" class="mt-2 text-left">
+                <b-icon icon="arrow-clockwise" class="border rounded p-1 clickable" style="height: 100%; width: 38px;"
+                    v-on:click="fetchPosts"></b-icon>
+            </b-col>
+            <b-col cols="10" sm="10" md="3" offset-sm="0" offset-md="7" class="mt-2">
                 <b-button variant="primary" v-on:click="post" style="width: 100%">Send</b-button>
             </b-col>
             </b-row>
@@ -104,3 +108,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .clickable {
+    cursor: pointer;
+  }
+</style>

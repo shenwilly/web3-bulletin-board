@@ -24,6 +24,13 @@ export default {
             return myPosts.slice().reverse();
         }
     },
-
+    mounted() {
+        this.fetchPosts()
+    },
+    methods: {
+        fetchPosts() {
+            this.$store.dispatch("fetchPosts");
+        }
+    }
 }
 </script>
