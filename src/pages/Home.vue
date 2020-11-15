@@ -97,14 +97,19 @@ export default {
       await this.thread.post(this.text)
       this.text = ""
       await this.$store.dispatch("fetchPosts");
-    //   this.posts = await this.thread.getPosts()
     },
 
     async reportPost(postId) {
-      console.log(postId)
       try {
         await GTCRService.reportPost(postId);
-        // this.$store.dispatch("markPostId")
+        this.$store.dispatch("markPostId", postId)
+        this.$bvToast.toast(`Post reported!`, {
+          title: 'Transaction submitted',
+          autoHideDelay: 5000,
+          appendToast: false,
+          variant: 'primary',
+          solid: true,
+        })
       } catch(e) {
           console.debug(e)
       }      

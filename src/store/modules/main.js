@@ -167,7 +167,12 @@ const initialState = {
     },
     filteredPosts(state) {
       return state.posts.filter(post => {
-        return !state.blockedPostIds.includes(post.postId)
+        return !state.blockedPostIds.includes(post.postId) && !state.markedPostIds.includes(post.postId)
+      });
+    },
+    markedPosts(state) {
+      return state.posts.filter(post => {
+        return state.markedPostIds.includes(post.postId)
       });
     },
     loggedIn(state) {

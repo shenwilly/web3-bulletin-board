@@ -1,7 +1,9 @@
 <template>
     <b-container>
         <b-row class="mt-3">
-            <!-- {{ reportedPosts }} -->
+            <b-col cols="12" v-for="post in markedPosts" v-bind:key="post.postId">
+                <Comment :post="post" :viewStatus="true" class="mb-2" @onClickView="goToCurate" />
+            </b-col>
             <b-col cols="12" v-for="post in reportedPosts" v-bind:key="post.postId">
                 <Comment :post="post" :viewStatus="true" class="mb-2" @onClickView="goToCurate" />
             </b-col>
@@ -30,10 +32,11 @@ export default {
         },
         reportedPosts() {
             const posts = this.$store.getters.posts
-            return posts.filter(post => {
-                return this.reportedPostIds.includes(post.postId)
-            });
-        }
+            return posts.filter(post => this.reportedPostIds.includes(post.postId))
+        },
+        markedPosts() {
+            return this.$store.getters.markedPosts.filter(post =>!this.reportedPostIds.includes(post.postId))
+        },
     },
     data() {
         return {
