@@ -15,13 +15,13 @@
         <b-navbar-nav v-if="isModerator && loggedIn">
           <b-nav-item :to="{ name: 'index' }" :class="currentRouteName == 'index' ? 'active' : ''">Home</b-nav-item>
           <b-nav-item :to="{ name: 'reports' }" :class="currentRouteName == 'reports' ? 'active' : ''">My Reports</b-nav-item>
-          <b-nav-item href="https://kovan-gtcr.netlify.app/" target="_blank">Policy</b-nav-item>
+          <b-nav-item :href="policyUrl" target="_blank">Posting Rules</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav v-else-if="!isModerator && loggedIn">
           <b-nav-item :to="{ name: 'index' }" :class="currentRouteName == 'index' ? 'active' : ''">Home</b-nav-item>
           <b-nav-item :to="{ name: 'myPosts' }" :class="currentRouteName == 'myPosts' ? 'active' : ''">My Posts</b-nav-item>
-          <b-nav-item href="https://kovan-gtcr.netlify.app/" target="_blank">Policy</b-nav-item>
-          <b-nav-item href="https://kovan-gtcr.netlify.app/" target="_blank">Apply as Moderator</b-nav-item>
+          <b-nav-item :href="policyUrl" target="_blank">Posting Rules</b-nav-item>
+          <b-nav-item :href="moderatorTcrUrl" target="_blank">Apply as Moderator</b-nav-item>
         </b-navbar-nav>
 
         <b-button v-if="!loggedIn" variant="primary" class="ml-auto" type="button" v-on:click="connect">🦊 Connect</b-button>
@@ -43,6 +43,7 @@
 // import { Resolver } from 'did-resolver'
 // import { getResolver } from '3id-resolver'
 import { shortenAddress } from '@/utils/address'
+import { GTCR_VIEWER_URL, MODERATOR_TCR_ADDRESS } from '@/env'
 
 export default {
   computed: {
@@ -66,6 +67,12 @@ export default {
     },
     currentRouteName() {
         return this.$route.name;
+    },
+    policyUrl() {
+      return this.$store.getters.policyUrl;
+    },
+    moderatorTcrUrl() {
+      return GTCR_VIEWER_URL + '/' + MODERATOR_TCR_ADDRESS;
     }
   },
   data() {
@@ -78,8 +85,12 @@ export default {
     // Box.getIPFS()
     // this.resolve()
     // this.fetchBlockedPostIds()
+    this.fetchMetaEvidence()
   },
   methods: {
+    fetchMetaEvidence() {
+      this.$store.dispatch("fetchMetaEvidence")
+    },
     // fetchBlockedPostIds() {
     //   this.$store.dispatch("fetchBlockedPostIds");
     // },

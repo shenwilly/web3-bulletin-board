@@ -13,6 +13,21 @@ import {
 } from '@/env';
 
 class GTCRService {
+    moderatorGTCR = new GeneralizedTCR(
+        window.ethereum,
+        MODERATOR_TCR_ADDRESS,
+        GTCR_VIEW_ADDRESS,
+        IPFS_GATEWAY,
+        MODERATOR_TCR_DEPLOYMENT_BLOCK
+    );
+
+    postGTCR = new GeneralizedTCR(
+        window.ethereum,
+        BLOCKED_POSTS_TCR_ADDRESS,
+        GTCR_VIEW_ADDRESS,
+        IPFS_GATEWAY,
+        BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
+    );
     // kovan
     // GTCR_VIEW_ADDRESS = "0x48ea7987bb7c839cc68aaf0b800aa615e8e7ba96";
     
@@ -23,51 +38,54 @@ class GTCRService {
     
     // MODERATOR_TCR_DEPLOYMENT_BLOCK = 22093223
     // BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK = 22111416
+    async fetchPostMetaEvidence() {
+        // const postGTCR = new GeneralizedTCR(
+        //     window.ethereum,
+        //     BLOCKED_POSTS_TCR_ADDRESS,
+        //     GTCR_VIEW_ADDRESS,
+        //     IPFS_GATEWAY,
+        //     BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
+        // );
+        
+        return await this.postGTCR.getLatestMetaEvidence()
+    }
 
     async fetchModerators() {
-        const moderatorGTCR = new GeneralizedTCR(
-            window.ethereum,
-            MODERATOR_TCR_ADDRESS,
-            GTCR_VIEW_ADDRESS,
-            IPFS_GATEWAY,
-            MODERATOR_TCR_DEPLOYMENT_BLOCK
-        );
-        
-        const items = await moderatorGTCR.getItems()
+        const items = await this.moderatorGTCR.getItems()
         return items
             .filter(item => item.status == 1)
             .map(item => item.decodedData[0])
     }
 
     async fetchBlockedPosts() {
-        const postGTCR = new GeneralizedTCR(
-            window.ethereum,
-            BLOCKED_POSTS_TCR_ADDRESS,
-            GTCR_VIEW_ADDRESS,
-            IPFS_GATEWAY,
-            BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
-        );
-        // console.log(await postGTCR.getLatestMetaEvidence())
+        // const postGTCR = new GeneralizedTCR(
+        //     window.ethereum,
+        //     BLOCKED_POSTS_TCR_ADDRESS,
+        //     GTCR_VIEW_ADDRESS,
+        //     IPFS_GATEWAY,
+        //     BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
+        // );
+        // console.log(await postGTCR.getLatestMetaEvidence(), "metaevidence")
             
-        const items = await postGTCR.getItems()
-        items.forEach(item => {
-            console.log(item.decodedData, "blockedPost", item['11'])
-        })
+        const items = await this.postGTCR.getItems()
+        // items.forEach(item => {
+        //     console.log(item.decodedData, "blockedPost", item['11'])
+        // })
         return items
             .filter(item => item.status == 1)
             .map(item => item.decodedData[0])
     }
 
     async fetchReportedItems(address) {
-        const postGTCR = new GeneralizedTCR(
-            window.ethereum,
-            BLOCKED_POSTS_TCR_ADDRESS,
-            GTCR_VIEW_ADDRESS,
-            IPFS_GATEWAY,
-            BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
-        );
+        // const postGTCR = new GeneralizedTCR(
+        //     window.ethereum,
+        //     BLOCKED_POSTS_TCR_ADDRESS,
+        //     GTCR_VIEW_ADDRESS,
+        //     IPFS_GATEWAY,
+        //     BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
+        // );
             
-        const items = await postGTCR.getItems()
+        const items = await this.postGTCR.getItems()
         // items.forEach(item => {
         //     console.log(item.decodedData, "blockedPost", item['11'])
         // })
@@ -91,14 +109,14 @@ class GTCRService {
 
         const contractWithSigner = contract.connect(signer);
         // const tx = await contractWithSigner.addItem
-        const postGTCR = new GeneralizedTCR(
-            window.ethereum,
-            BLOCKED_POSTS_TCR_ADDRESS,
-            GTCR_VIEW_ADDRESS,
-            IPFS_GATEWAY,
-            BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
-        );
-        const metaEvidence = await postGTCR.getLatestMetaEvidence()
+        // const postGTCR = new GeneralizedTCR(
+        //     window.ethereum,
+        //     BLOCKED_POSTS_TCR_ADDRESS,
+        //     GTCR_VIEW_ADDRESS,
+        //     IPFS_GATEWAY,
+        //     BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
+        // );
+        const metaEvidence = await this.postGTCR.getLatestMetaEvidence()
         console.log(metaEvidence[0])
         const encodedParams = gtcrEncode({
             columns: metaEvidence[0].metadata.columns,

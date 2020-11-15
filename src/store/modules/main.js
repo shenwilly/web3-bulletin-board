@@ -1,5 +1,6 @@
 import Box, { isLoggedIn } from '3box'
 import GTCRService from '@/services/gtcr'
+import { IPFS_GATEWAY } from '@/env'
 
 const initialState = {
     web3Enabled: true,
@@ -14,6 +15,7 @@ const initialState = {
     user: null,
     isModerator: false,
     thread: null,
+    metaEvidence: null,
   };
   
   export const state = { ...initialState };
@@ -84,6 +86,12 @@ const initialState = {
             context.commit('setModerator', true)
           }
         }
+      },
+
+      async fetchMetaEvidence(context) {
+        const metaEvidence = await GTCRService.fetchPostMetaEvidence()
+        console.log(metaEvidence)
+        context.commit('setMetaEvidence', metaEvidence)
       }
   };
   
@@ -117,6 +125,9 @@ const initialState = {
     },
     setModerator(state, isModerator) {
       state.isModerator = isModerator
+    },
+    setMetaEvidence(state, metaEvidence) {
+      state.metaEvidence = metaEvidence
     }
   };
   
@@ -153,6 +164,10 @@ const initialState = {
     },
     thread(state) {
       return state.thread
+    },
+    policyUrl(state) {
+      if (state.metaEvidence == null) return ""
+      return IPFS_GATEWAY + state.metaEvidence[0].fileURI;
     }
   };
   
