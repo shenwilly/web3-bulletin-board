@@ -42,12 +42,12 @@ const router = new Router({
       component: HomePage,
     },
     {
-      path: "reports/",
+      path: "/reports",
       name: "reports",
       component: ReportsPage,
     },
     {
-      path: "my_posts/",
+      path: "/my_posts",
       name: "myPosts",
       component: MyPostsPage,
     },
