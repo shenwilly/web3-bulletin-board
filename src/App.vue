@@ -30,6 +30,11 @@
           <label v-else style="color: white" class="mb-0">{{ selectedAccount }}</label> -->
           <label v-if="isModerator" style="color: white" class="mb-0">{{ user.DID | shorten }} (Moderator)</label>
           <label v-else style="color: white" class="mb-0">{{ user.DID | shorten }}</label>
+
+          <b-avatar 
+              class="ml-2"
+              :size="47"
+              :src="'https://avatars.dicebear.com/api/identicon/' + user.DID + '.svg'" />
         </div>
       </b-navbar>
 
@@ -44,6 +49,7 @@
 // import { getResolver } from '3id-resolver'
 import { shortenAddress } from '@/utils/address'
 import { GTCR_VIEWER_URL, MODERATOR_TCR_ADDRESS } from '@/env'
+// import GTCRService from '@/services/gtcr'
 
 export default {
   computed: {
