@@ -77,8 +77,12 @@ export default {
     // this.init3Box()
     // Box.getIPFS()
     // this.resolve()
+    // this.fetchBlockedPostIds()
   },
   methods: {
+    // fetchBlockedPostIds() {
+    //   this.$store.dispatch("fetchBlockedPostIds");
+    // },
     // async getAddressFromMetaMask() {
     //   if (typeof window.ethereum == "undefined") {
     //     this.web3Enabled = false

@@ -48,7 +48,8 @@ export default {
   },
   computed: {
     reversedPosts() {
-      return this.$store.getters.posts.slice().reverse();
+    //   return this.$store.getters.posts.slice().reverse();
+      return this.$store.getters.filteredPosts.slice().reverse();
     },
     isModerator() {
       return this.$store.getters.isModerator

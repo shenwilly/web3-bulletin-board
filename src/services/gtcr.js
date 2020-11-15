@@ -15,11 +15,13 @@ class GTCRService {
     // LIST_ADDRESS = "0x089D86D56C1Cae8F8dCfCBa722a3123Be112f9ce";
 
     // kovan
-    LIST_ADDRESS = "0x089D86D56C1Cae8F8dCfCBa722a3123Be112f9ce";
+    MODERATOR_TCR_ADDRESS = "0x089D86D56C1Cae8F8dCfCBa722a3123Be112f9ce";
+    BLOCKED_POSTS_TCR_ADDRESS = "0xa1e686E44f7Eccb2A4876ADddE10dc0796778D7f";
     // LIST_ADDRESS = "0x0eeB33f579C543A199ECc5c658DC0d1a74F2306F";
     
     
-    DEPLOYMENT_BLOCK = 22093223 ; // Optional, but recommended. Setting the deployment block speeds up requests.
+    MODERATOR_TCR_DEPLOYMENT_BLOCK = 22093223 ; // Optional, but recommended. Setting the deployment block speeds up requests.
+    BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK = 22111416 ; // Optional, but recommended. Setting the deployment block speeds up requests.
 
     // constructor() {
     //     console.log("create")
@@ -34,24 +36,35 @@ class GTCRService {
     // }
 
     async fetchModerators() {
-        const gtcr = new GeneralizedTCR(
+        const moderatorGTCR = new GeneralizedTCR(
             window.ethereum,
-            this.LIST_ADDRESS,
+            this.MODERATOR_TCR_ADDRESS,
             this.GTCR_VIEW_ADDRESS,
             this.IPFS_GATEWAY,
-            this.DEPLOYMENT_BLOCK
+            this.MODERATOR_TCR_DEPLOYMENT_BLOCK
         );
-        // console.log(await gtcr.getLatestMetaEvidence())
-        // const item = await gtcr.getItem("0x08d159a68ae09674f65a464b6ec0f275f362592094734e4accc012084fc978dc")
-        // console.info(items.map(item => item.decodedData))
-        // console.log(item.decodedData)
         
-        // console.log(this.LIST_ADDRESS, this.GTCR_VIEW_ADDRESS)
-        // console.info(await this.gtcrFactory.getTCRAddresses());
-            
-        const items = await gtcr.getItems()
+        const items = await moderatorGTCR.getItems()
         // console.log(items)
         return items.map(item => item.decodedData[0])
+    }
+
+    async fetchBlockedPosts() {
+        const postGTCR = new GeneralizedTCR(
+            window.ethereum,
+            this.BLOCKED_POSTS_TCR_ADDRESS,
+            this.GTCR_VIEW_ADDRESS,
+            this.IPFS_GATEWAY,
+            this.BLOCKED_POSTS_TCR_DEPLOYMENT_BLOCK
+        );
+            
+        const items = await postGTCR.getItems()
+        items.forEach(item => {
+            console.log(item.decodedData, "blockedPost", item)
+        })
+        return items
+            .filter(item => item.status == 1)
+            .map(item => item.decodedData[0])
     }
 }
   

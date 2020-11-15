@@ -6,6 +6,7 @@ const initialState = {
     threadAddress: '/orbitdb/zdpuB2ZwozqZkfSCKCgqY1mDC3CQ4B85rgbAe7NteWBWCMcoJ/3box.thread.myThread.myThread',
     spaceName: 'myThread',
     posts: [],
+    blockedPostIds: [],
     accounts: [],
     isLoading: false,
     loadingLabel: "",
@@ -29,8 +30,19 @@ const initialState = {
         } else {
           posts = await Box.getThreadByAddress(state.threadAddress)
         }
-        console.log(posts[0])
-        context.commit('fetchPosts', posts);
+        // console.log(posts[1])
+
+        await this.dispatch("fetchBlockedPostIds")
+
+        context.commit('setPosts', posts);
+      },
+      
+      async fetchBlockedPostIds(context) {
+        console.log("fetch blockedPosts")
+        let blockedPostIds = await GTCRService.fetchBlockedPosts();
+        
+        console.log(blockedPostIds, "???")
+        context.commit('setBlockedPostIds', blockedPostIds);
       },
       
       async connect(context) {
@@ -82,8 +94,11 @@ const initialState = {
     setAccounts(state, accounts) {
         state.accounts = accounts
     },
-    fetchPosts(state, posts) {
+    setPosts(state, posts) {
         state.posts = posts
+    },
+    setBlockedPostIds(state, postIds) {
+        state.blockedPostIds = postIds
     },
     setLoading(state, isLoading) {
       state.isLoading = isLoading
@@ -108,6 +123,11 @@ const initialState = {
   const getters = {
     posts(state) {
       return state.posts
+    },
+    filteredPosts(state) {
+      return state.posts.filter(post => {
+        return !state.blockedPostIds.includes(post.postId)
+      });
     },
     loggedIn(state) {
       if (state.user == null) return false
