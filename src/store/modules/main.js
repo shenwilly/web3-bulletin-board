@@ -8,7 +8,9 @@ const initialState = {
     accounts: [],
     isLoading: false,
     loadingLabel: "",
-    isModerator: true,
+    profile: null,
+    user: null,
+    isModerator: false,
     thread: null,
   };
   
@@ -26,6 +28,7 @@ const initialState = {
         } else {
           posts = await Box.getThreadByAddress(state.threadAddress)
         }
+        console.log(posts[0])
         context.commit('fetchPosts', posts);
       },
       
@@ -46,16 +49,25 @@ const initialState = {
         if (state.accounts.length > 0) {
           context.commit('setLoadingLabel', "Authenticating (2/3)");
           
-          await box.auth(['myThread'], {address: state.accounts[0] })
+          await box.auth(['myThread'], { address: state.accounts[0] })
+          // console.log(box.DID)
+          
           // const isLoggedInx = isLoggedIn(this.accounts[0])
-          // this.profile = await Box.getProfile(this.accounts[0])
+
+          // const profile = await Box.getProfile(state.accounts[0])
+          // context.commit('setProfile', profile);
           // console.log(isLoggedInx, "profile",)
 
           context.commit('setLoadingLabel', "Syncing (3/3)");
           
           const space = await box.openSpace(state.spaceName)
+          context.commit('setUser', space.user);
+
           const thread = await space.joinThreadByAddress('/orbitdb/zdpuB2ZwozqZkfSCKCgqY1mDC3CQ4B85rgbAe7NteWBWCMcoJ/3box.thread.myThread.myThread')
           context.commit('setThread', thread);
+
+          // console.log(space.user)
+          // console.log(space.user.DID)
         }
       }
   };
@@ -78,6 +90,12 @@ const initialState = {
     },
     setThread(state, thread) {
       state.thread = thread
+    },
+    setProfile(state, profile) {
+      state.profile = profile
+    },
+    setUser(state, user) {
+      state.user = user
     }
   };
   
@@ -100,6 +118,12 @@ const initialState = {
     },
     accounts(state) {
       return state.accounts
+    },
+    profile(state) {
+      return state.profile
+    },
+    user(state) {
+      return state.user
     },
     thread(state) {
       return state.thread

@@ -10,11 +10,11 @@
       </template>
 
       <b-navbar type="dark" style="background-color: rgb(77, 0, 180)">
-        <b-navbar-brand href="#">302chan</b-navbar-brand>
+        <b-navbar-brand :to="{ name: 'index' }" >Web3BB</b-navbar-brand>
 
         <b-navbar-nav v-if="isModerator && loggedIn">
           <b-nav-item :to="{ name: 'index' }" :class="currentRouteName == 'index' ? 'active' : ''">Home</b-nav-item>
-          <b-nav-item :to="{ name: 'reports' }" :class="currentRouteName == 'reports' ? 'active' : ''">Reports</b-nav-item>
+          <b-nav-item :to="{ name: 'reports' }" :class="currentRouteName == 'reports' ? 'active' : ''">My Reports</b-nav-item>
           <b-nav-item href="https://kovan-gtcr.netlify.app/" target="_blank">Policy</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav v-else-if="!isModerator && loggedIn">
@@ -26,8 +26,10 @@
 
         <b-button v-if="!loggedIn" variant="primary" class="ml-auto" type="button" v-on:click="connect">🦊 Connect</b-button>
         <div v-else class="ml-auto">
-          <label v-if="isModerator" style="color: white" class="mb-0">{{ selectedAccount }} (Moderator)</label>
-          <label v-else style="color: white" class="mb-0">{{ selectedAccount }}</label>
+          <!-- <label v-if="isModerator" style="color: white" class="mb-0">{{ selectedAccount }} (Moderator)</label>
+          <label v-else style="color: white" class="mb-0">{{ selectedAccount }}</label> -->
+          <label v-if="isModerator" style="color: white" class="mb-0">{{ user.DID | shorten }} (Moderator)</label>
+          <label v-else style="color: white" class="mb-0">{{ user.DID | shorten }}</label>
         </div>
       </b-navbar>
 
@@ -40,6 +42,7 @@
 // import Box from '3box'
 // import { Resolver } from 'did-resolver'
 // import { getResolver } from '3id-resolver'
+import { shortenAddress } from '@/utils/address'
 
 import GTCRService from '@/services/gtcr'
 
@@ -57,8 +60,11 @@ export default {
     isModerator() {
       return this.$store.getters.isModerator
     },
-    selectedAccount() {
-      return this.$store.getters.accounts[0];
+    // selectedAccount() {
+    //   return this.$store.getters.accounts[0];
+    // },
+    user() {
+      return this.$store.getters.user;
     },
     currentRouteName() {
         return this.$route.name;
@@ -147,7 +153,13 @@ export default {
     //   console.log(postId)
     // }
 
+  },
+  filters: {
+    shorten: function (value) {
+      return shortenAddress(value)
+    }
   }
+
 }
 </script>
 

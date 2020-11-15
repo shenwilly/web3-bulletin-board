@@ -6,7 +6,7 @@
             <b-col cols="10">
               <b-row>
                 <b-col cols="12">
-                  <label class="text-author mb-0"><i>{{ author }}</i></label>
+                  <label class="text-author mb-0"><i>{{ author | shorten }}</i></label>
                 </b-col>
                 <b-col cols="12">
                   <label class="text-date mb-0">{{ timestamp | moment("from") }}</label>
@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { shortenAddress } from '@/utils/address'
+
 export default {
   props: {
     post: Object,
@@ -47,6 +49,11 @@ export default {
   methods: {
     handleReport() {
       this.$emit('onClickReport', this.post.postId)
+    }
+  },
+  filters: {
+    shorten: function (value) {
+      return shortenAddress(value)
     }
   }
 }
