@@ -1,4 +1,4 @@
-# web3-social-media
+# web3-bulletin-board
 
 ## Project setup
 ```
