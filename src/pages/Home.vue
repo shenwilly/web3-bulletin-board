@@ -33,7 +33,7 @@
             </b-row>
 
             <b-row class="mt-3">
-            <b-col cols="12" v-for="post in reversedPosts" v-bind:key="post.postId">
+            <b-col cols="12" v-for="post in orderedPosts" v-bind:key="post.postId">
                 <Comment :post="post" class="mb-2" 
                 :canReport="isModerator"
                 @onClickReport="reportPost"/>
@@ -52,7 +52,7 @@ export default {
     Comment,
   },
   computed: {
-    reversedPosts() {
+    orderedPosts() {
     //   return this.$store.getters.posts.slice().reverse();
       return this.$store.getters.filteredPosts.slice().reverse();
     },
