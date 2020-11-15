@@ -2,6 +2,8 @@
 
 A decentralised bulletin board powered by [3Box](https://github.com/3box/) (DB) & [Kleros TCRs](https://github.com/kleros/) (Crowd content moderation).
 
+[Live Website](https://web3bb.netlify.app/)
+
 ## Project setup
 ```
 yarn
