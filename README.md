@@ -22,3 +22,5 @@ yarn serve
 ### TCRs (Kovan)
 - [Moderators TCR](https://curate.kleros.io/tcr/0xbC981A7A4cd9eA2dE0b7e2192b1d2ce25e3B7263)
 - [Blocked Posts TCR](https://curate.kleros.io/tcr/0xEE66D42489C4624F70dc28aE2D0a7a1cE698c77C)
+
+Discord: Lyner#9077
